@@ -1,8 +1,8 @@
 import './globals.css'
 
 export const metadata = {
-  title: 'Mi Blog Personal',
-  description: 'Bienvenido a mi blog personal',
+  title: 'La Decadencia de Trump — Crónica Irónica',
+  description: 'Del presidente de "paz" al presidente de guerra. Crónica satírica de la caída de Donald Trump.',
 }
 
 export default function RootLayout({ children }) {
