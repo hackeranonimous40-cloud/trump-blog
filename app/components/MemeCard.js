@@ -1,4 +1,7 @@
+'use client'
+
 import Image from 'next/image'
+import { useState } from 'react'
 
 const memes = [
   {
@@ -35,21 +38,46 @@ const memes = [
 
 export default function MemeCard({ index = 0 }) {
   const meme = memes[index % memes.length]
+  const [expanded, setExpanded] = useState(false)
 
   return (
-    <div className="meme-card">
-      <Image
-        src={meme.url}
-        alt={meme.alt}
-        fill
-        className="meme-card-image"
-      />
-      <div className="meme-card-overlay" />
-      <div className="meme-inner">
-        <div className="meme-top">{meme.caption}</div>
+    <>
+      <div className="meme-card" onClick={() => setExpanded(true)}>
+        <Image
+          src={meme.url}
+          alt={meme.alt}
+          fill
+          className="meme-card-image"
+        />
+        <div className="meme-card-overlay" />
+        <div className="meme-inner">
+          <div className="meme-top">{meme.caption}</div>
+        </div>
+        <div className="meme-watermark">r/LaDecadenciaDeTrump</div>
+        <div className="meme-expand-hint">🔍 Click para ampliar</div>
       </div>
-      <div className="meme-watermark">r/LaDecadenciaDeTrump</div>
-    </div>
+
+      {expanded && (
+        <div className="meme-modal" onClick={() => setExpanded(false)}>
+          <div className="meme-modal-backdrop" />
+          <div className="meme-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="meme-modal-close" onClick={() => setExpanded(false)}>✕</button>
+            <div className="meme-modal-image-wrapper">
+              <Image
+                src={meme.url}
+                alt={meme.alt}
+                fill
+                className="meme-modal-image"
+              />
+            </div>
+            <div className="meme-modal-caption">{meme.caption}</div>
+            <div className="meme-modal-surprise">
+              <span className="surprise-text">🤡 "TREMENDOUS MEME. THE BEST MEME. BELIEVE ME." 🤡</span>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   )
 }
 
@@ -57,6 +85,7 @@ export function MemeSection() {
   return (
     <section className="meme-section">
       <h2>🎭 Memes de la Decadencia</h2>
+      <p className="meme-section-subtitle">Haz click en cualquier meme para ampliarlo</p>
       <div className="meme-grid">
         {memes.map((_, i) => (
           <MemeCard key={i} index={i} />

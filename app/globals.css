@@ -57,19 +57,31 @@ body {
 }
 
 /* HERO BANNER */
+.hero-banner-link {
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+}
+
 .hero-banner {
   position: relative;
   width: 100%;
-  height: 350px;
+  height: 380px;
   border-radius: 12px;
   overflow: hidden;
   margin-bottom: 3rem;
   border: 3px solid #c9a227;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.hero-banner:hover {
+  border-color: #e74c3c;
+  box-shadow: 0 0 30px rgba(231, 76, 60, 0.4);
 }
 
 .hero-bg-image {
   object-fit: cover;
-  filter: brightness(0.3) saturate(1.2);
+  filter: brightness(0.25) saturate(1.3);
 }
 
 .hero-overlay {
@@ -92,24 +104,17 @@ body {
   margin-bottom: 1rem;
 }
 
-.hero-emoji-art {
-  display: flex;
-  gap: 2rem;
-  margin-bottom: 1rem;
+.hero-clown-icon {
+  font-size: 5rem;
+  margin-bottom: 0.75rem;
+  animation: clownPulse 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 15px rgba(231, 76, 60, 0.5));
 }
 
-.hero-emoji {
-  font-size: 4rem;
-  animation: float 3s ease-in-out infinite;
-}
-
-.hero-emoji-1 { animation-delay: 0s; }
-.hero-emoji-2 { animation-delay: 0.5s; }
-.hero-emoji-3 { animation-delay: 1s; }
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
+@keyframes clownPulse {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.15) rotate(-5deg); }
+  75% { transform: scale(1.15) rotate(5deg); }
 }
 
 .hero-meme-bottom {
@@ -117,6 +122,24 @@ body {
   color: #c9a227;
   font-style: italic;
   text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+}
+
+.hero-cta {
+  display: inline-block;
+  margin-top: 1.2rem;
+  background: rgba(231, 76, 60, 0.85);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  animation: ctaPulse 1.5s ease-in-out infinite;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+
+@keyframes ctaPulse {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.05); opacity: 1; }
 }
 
 .hero-particles {
@@ -129,16 +152,16 @@ body {
 .particle {
   position: absolute;
   top: -30px;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   animation: fall linear infinite;
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 @keyframes fall {
   0% { transform: translateY(-30px) rotate(0deg); opacity: 0; }
-  10% { opacity: 0.6; }
-  90% { opacity: 0.6; }
-  100% { transform: translateY(320px) rotate(360deg); opacity: 0; }
+  10% { opacity: 0.5; }
+  90% { opacity: 0.5; }
+  100% { transform: translateY(400px) rotate(360deg); opacity: 0; }
 }
 
 /* POSTS */
@@ -317,9 +340,17 @@ body {
 
 .meme-section h2 {
   font-size: 1.8rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
   color: #c9a227;
   text-align: center;
+}
+
+.meme-section-subtitle {
+  text-align: center;
+  color: #888;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+  font-style: italic;
 }
 
 .meme-grid {
@@ -333,17 +364,24 @@ body {
   border-radius: 12px;
   min-height: 200px;
   overflow: hidden;
-  transition: transform 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
   box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  cursor: pointer;
 }
 
 .meme-card:hover {
   transform: scale(1.03) rotate(1deg);
+  box-shadow: 0 8px 30px rgba(231, 76, 60, 0.3);
 }
 
 .meme-card-image {
   object-fit: cover;
   filter: brightness(0.5) saturate(1.2);
+  transition: filter 0.3s;
+}
+
+.meme-card:hover .meme-card-image {
+  filter: brightness(0.6) saturate(1.4);
 }
 
 .meme-card-overlay {
@@ -377,6 +415,127 @@ body {
   font-size: 0.6rem;
   font-style: italic;
   z-index: 3;
+}
+
+.meme-expand-hint {
+  position: absolute;
+  bottom: 8px;
+  left: 12px;
+  color: rgba(255,255,255,0.5);
+  font-size: 0.65rem;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.meme-card:hover .meme-expand-hint {
+  opacity: 1;
+}
+
+/* MEME MODAL */
+.meme-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.meme-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(10px);
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.meme-modal-content {
+  position: relative;
+  z-index: 1001;
+  background: #16213e;
+  border-radius: 16px;
+  overflow: hidden;
+  max-width: 700px;
+  width: 100%;
+  max-height: 90vh;
+  border: 3px solid #c9a227;
+  animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 0 60px rgba(201, 162, 39, 0.3);
+}
+
+@keyframes modalPop {
+  from { transform: scale(0.5) rotate(-5deg); opacity: 0; }
+  to { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.meme-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1002;
+  background: rgba(231, 76, 60, 0.9);
+  border: none;
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+.meme-modal-close:hover {
+  transform: scale(1.2) rotate(90deg);
+}
+
+.meme-modal-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 400px;
+}
+
+.meme-modal-image {
+  object-fit: cover;
+}
+
+.meme-modal-caption {
+  padding: 1.5rem;
+  text-align: center;
+  color: white;
+  font-size: 1.3rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  letter-spacing: 1px;
+}
+
+.meme-modal-surprise {
+  background: linear-gradient(135deg, #e74c3c, #c9a227);
+  padding: 1rem;
+  text-align: center;
+}
+
+.surprise-text {
+  color: white;
+  font-weight: bold;
+  font-size: 0.95rem;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+  animation: surpriseBounce 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes surpriseBounce {
+  from { transform: scale(1); }
+  to { transform: scale(1.03); }
 }
 
 /* MEME ILLUSTRATIONS (CSS-based) */
@@ -646,19 +805,31 @@ body {
   }
 
   .hero-banner {
-    height: 280px;
+    height: 300px;
   }
 
   .hero-meme-top {
     font-size: 1.3rem;
   }
 
-  .hero-emoji-art {
-    gap: 1rem;
+  .hero-clown-icon {
+    font-size: 3.5rem;
   }
 
-  .hero-emoji {
-    font-size: 3rem;
+  .iran-hero {
+    height: 250px;
+  }
+
+  .iran-hero-overlay h1 {
+    font-size: 1.8rem;
+  }
+
+  .iran-content {
+    padding: 1.5rem;
+  }
+
+  .meme-modal-image-wrapper {
+    height: 280px;
   }
 
   .meme-grid {
@@ -672,4 +843,242 @@ body {
   .gallery-grid {
     grid-template-columns: 1fr 1fr;
   }
+}
+
+/* IRAN PAGE */
+.iran-article {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.iran-hero {
+  position: relative;
+  width: 100%;
+  height: 350px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  border: 3px solid #c9a227;
+}
+
+.iran-hero-image {
+  object-fit: cover;
+  filter: brightness(0.3);
+}
+
+.iran-hero-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  padding: 1rem;
+}
+
+.iran-hero-overlay h1 {
+  font-size: 2.5rem;
+  color: #c9a227;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+  margin-bottom: 0.5rem;
+}
+
+.iran-hero-overlay p {
+  color: white;
+  font-size: 1.1rem;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+  text-align: center;
+}
+
+.iran-content {
+  background: #16213e;
+  border-radius: 12px;
+  padding: 2rem;
+  border-left: 4px solid #c9a227;
+}
+
+.iran-section {
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #2a2a4a;
+}
+
+.iran-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.iran-section h2 {
+  font-size: 1.6rem;
+  color: #c9a227;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.iran-section p {
+  color: #c0c0c0;
+  margin-bottom: 1rem;
+  line-height: 1.8;
+}
+
+.iran-section p strong {
+  color: #e74c3c;
+}
+
+.iran-section p em {
+  color: #f39c12;
+}
+
+.iran-inline-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  border: 2px solid #2a2a4a;
+}
+
+.iran-quote-block {
+  background: #0f0f23;
+  border-left: 4px solid #e74c3c;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.iran-quote {
+  font-size: 1.2rem;
+  color: white;
+  font-style: italic;
+  margin-bottom: 0.75rem;
+}
+
+.iran-quote-author {
+  color: #888;
+  font-size: 0.85rem;
+  display: block;
+}
+
+.iran-fact-check {
+  color: #f39c12;
+  font-size: 0.85rem;
+  margin-top: 0.75rem;
+  font-style: italic;
+}
+
+.iran-fact-box {
+  background: linear-gradient(135deg, #0f0f23, #1a1a3e);
+  border: 2px solid #c9a227;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.iran-fact-box h3 {
+  color: #c9a227;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.iran-fact-box ul {
+  list-style: none;
+  padding: 0;
+}
+
+.iran-fact-box li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #2a2a4a;
+  color: #c0c0c0;
+}
+
+.iran-fact-box li:last-child {
+  border-bottom: none;
+}
+
+.iran-fact-box li strong {
+  color: #e74c3c;
+}
+
+.iran-truth-box {
+  background: linear-gradient(135deg, #e74c3c20, #c9a22720);
+  border: 2px solid #e74c3c;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.iran-truth-box h3 {
+  color: #e74c3c;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.iran-truth-box p {
+  color: #d0d0d0;
+}
+
+.iran-truth-box p strong {
+  color: #e74c3c;
+}
+
+.iran-timeline {
+  background: #0f0f23;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border: 2px solid #2a2a4a;
+}
+
+.iran-timeline h3 {
+  color: #c9a227;
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+}
+
+.timeline-item {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-left: 3px solid #c9a227;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 1.2rem;
+  width: 12px;
+  height: 12px;
+  background: #e74c3c;
+  border-radius: 50%;
+  border: 2px solid #c9a227;
+}
+
+.timeline-item:not(:last-child) {
+  border-bottom: 1px solid #2a2a4a;
+}
+
+.timeline-date {
+  flex-shrink: 0;
+  background: #e74c3c;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  height: fit-content;
+}
+
+.timeline-item p {
+  color: #b0b0b0;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.final-quote {
+  border-left-color: #c9a227;
+  background: linear-gradient(135deg, #0f0f23, #16213e);
 }
